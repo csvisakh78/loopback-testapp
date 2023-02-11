@@ -1,0 +1,270 @@
+openapi: 3.0.0
+info:
+    title: Loopback 3 Test Application
+    description: This is a test application as part of interview assignment.
+    version: 0.0.1
+servers:
+    - url: http://localhost:3000/api
+      description: Development server
+components:
+  securitySchemes:
+      ApiKeyAuth:
+          type: apiKey
+          in: query
+          name: access_token
+          description: Access token generated from login api
+security:
+    - ApiKeyAuth: []
+paths:
+  /users/login:
+    post:
+      tags:
+        - User
+      security: []
+      summary: Loggedin with credentials and generate access token
+      requestBody:
+        description: Body payload for fetching accesstoken
+        content:
+            'application/json':
+                schema:
+                    $ref: '#/definitions/LoggedIn'
+      responses:
+          '200':
+            description: loggedin succesfully
+            content:
+                'application/json':
+                    schema:
+                      $ref: '#/definitions/LoggedInResponse'
+  /cars:
+    get:
+      tags:
+        - Cars
+      summary: Get all cars
+      responses:
+          '200':
+            description: cars fetched succesfully
+            content:
+                'application/json':
+                    schema:
+                      type: 'array'
+                      items:
+                        $ref: '#/definitions/GetAllCarsResponse'
+    post:
+      tags:
+        - Cars
+      summary: Create new cars
+      requestBody:
+        description: Body payload for creating car
+        content:
+            'application/json':
+                schema:
+                    $ref: '#/definitions/CreateCar'
+      responses:
+          '200':
+            description: Car created succesfully
+            content:
+                'application/json':
+                    schema:
+                      $ref: '#/definitions/GetAllCarsResponse'
+  /cars/{id}:
+    patch:
+      tags:
+        - Cars
+      summary: Update a car by its id
+      parameters:
+        - in: path
+          name: id
+      requestBody:
+        description: Body payload for updating car
+        content:
+            'application/json':
+                schema:
+                    $ref: '#/definitions/CreateCar'
+      responses:
+          '200':
+            description: Car update succesfully
+            content:
+                'application/json':
+                    schema:
+                      $ref: '#/definitions/GetAllCarsResponse'
+    delete:
+      tags:
+        - Cars
+      summary: Delete a car by its id
+      parameters:
+        - in: path
+          name: id
+      responses:
+          '200':
+            description: Car deleted succesfully
+            content:
+                    'application/json':
+                      schema:
+                        type: object
+                        properties:
+                          count:
+                            type: 'number'
+                            example: 1
+  /cars/{id}/compatibleTyres:
+     get:
+      tags:
+        - Cars
+      parameters:
+        - in: path
+          name: id
+      summary: Get all compatible tyres of a car by id
+      responses:
+          '200':
+            description: tyres fetched succesfully
+            content:
+                'application/json':
+                    schema:
+                      type: 'array'
+                      items:
+                        $ref: '#/definitions/GetTyresResponse'
+  /tyres:
+    get:
+      tags:
+        - Tyre
+      summary: Get all tyres
+      responses:
+          '200':
+            description: tyres fetched succesfully
+            content:
+                'application/json':
+                    schema:
+                      type: 'array'
+                      items:
+                        $ref: '#/definitions/GetTyresResponse'
+    post:
+      tags:
+        - Tyre
+      summary: Create new tyre
+      requestBody:
+        description: Body payload for creating new tyre
+        content:
+            'application/json':
+                schema:
+                    $ref: '#/definitions/GetTyresResponse'
+      responses:
+          '200':
+            description: Tyre created succesfully
+            content:
+                'application/json':
+                    schema:
+                      $ref: '#/definitions/GetTyresResponse'
+  /tyres/{id}:
+    patch:
+      tags:
+        - Tyre
+      summary: Update a tyre by its id
+      parameters:
+        - in: path
+          name: id
+      requestBody:
+        description: Body payload for updating tyre
+        content:
+            'application/json':
+                schema:
+                    $ref: '#/definitions/GetTyresResponse'
+      responses:
+          '200':
+            description: Car update succesfully
+            content:
+                'application/json':
+                    schema:
+                      $ref: '#/definitions/GetAllCarsResponse'
+    delete:
+      tags:
+        - Tyre
+      summary: Delete a tyre by its id
+      parameters:
+        - in: path
+          name: id
+      responses:
+          '200':
+            description: Tyre deleted succesfully
+            content:
+                    'application/json':
+                      schema:
+                        type: object
+                        properties:
+                          count:
+                            type: 'number'
+                            example: 1
+  /cars/{tyreSize}/compatibleTyres:
+     get:
+      tags:
+        - Tyre
+      parameters:
+        - in: path
+          name: tyreSize
+      summary: Get all compatible cars of provided tyre size
+      responses:
+          '200':
+            description: cars fetched succesfully
+            content:
+                'application/json':
+                    schema:
+                      type: 'array'
+                      items:
+                        $ref: '#/definitions/GetAllCarsResponse'
+definitions:
+  LoggedIn:
+    type: 'object'
+    properties:
+        email:
+          type: string
+          example: testuser1@sampleapp.com
+        password:
+          type: 'string'
+          example: password
+  LoggedInResponse:
+    type: 'object'
+    properties:
+        id:
+          type: 'string'
+          example: ukGHDh8d7noqRVdf5x6Q2yivwtvpAapxChrdsWinChk22A4xtSAUZOhLQChrlG4Q
+          description: 'Access token'
+        userId:
+          type: 'string'
+          example: 1
+  GetAllCarsResponse:
+      type: 'object'
+      properties:
+          brandId:
+            type: 'number'
+            example: 5
+          model:
+            type: 'string'
+            example: suv
+          tyreSize:
+            type: 'number'
+            example: 12
+          carCode:
+            type: 'string'
+            example: faf85de4-773b-4981-a550-cdb24832b4b8
+  CreateCar:
+    type: object
+    properties:
+      brandId:
+        type: 'number'
+        example: 5
+      model:
+        type: 'string'
+        example: suv
+      tyreSize:
+        type: 'number'
+        example: 12
+  GetTyresResponse:
+    type: object
+    properties:
+      brandId:
+        type: 'number'
+        example: 5
+      model:
+        type: 'string'
+        example: suv
+      tyreSize:
+        type: 'number'
+        example: 12
