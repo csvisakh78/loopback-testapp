@@ -13,3 +13,7 @@ $ cd loopback-testapp
 $ npm install
 $ npm start
 ```
+
+## Notes
+
+You can access swagger doc in http://localhost:3000/api-docs
